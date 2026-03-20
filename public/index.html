@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>凱大王PP</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f3f3f3;
+      font-family: Arial, "Microsoft JhengHei", sans-serif;
+      color: #111;
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    .lobby-title {
+      font-size: 48px;
+      margin: 10px 0 30px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .create-room-box {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .create-room-box input {
+      width: 360px;
+      max-width: 100%;
+      height: 64px;
+      font-size: 24px;
+      padding: 0 16px;
+      border: 2px solid #888;
+      border-radius: 8px;
+      outline: none;
+      background: white;
+    }
+
+    .create-room-box button {
+      width: 160px;
+      height: 64px;
+      font-size: 24px;
+      border: 1px solid #c7c7c7;
+      background: #efefef;
+      color: #444;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .create-room-box button:disabled,
+    .join-row button:disabled,
+    .leave-btn:disabled,
+    #resetBtn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .section-title {
+      font-size: 28px;
+      margin: 20px 0 16px;
+      font-weight: 700;
+    }
+
+    .rooms {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .room-card,
+    .room-page {
+      background: white;
+      border: 1px solid #d8d8d8;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .room-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .room-name {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .room-count {
+      font-size: 22px;
+      color: #333;
+    }
+
+    .join-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .join-row input {
+      flex: 1;
+      min-width: 220px;
+      height: 56px;
+      font-size: 22px;
+      padding: 0 14px;
+      border: 1px solid #999;
+      border-radius: 8px;
+    }
+
+    .join-row button,
+    .leave-btn {
+      width: 120px;
+      height: 56px;
+      font-size: 22px;
+      border: 1px solid #bdbdbd;
+      background: #efefef;
+      color: #555;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .players {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .player-item {
+      font-size: 20px;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 160px;
+      justify-content: center;
+    }
+
+    .player-dot {
+      display: inline-block;
+      width: 22px;
+      height: 14px;
+      border-radius: 4px;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      margin: 24px 0 16px;
+    }
+
+    #resetBtn {
+      width: 100%;
+      max-width: 700px;
+      height: 56px;
+      background: #3ccfcf;
+      border: none;
+      border-radius: 12px;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .grid {
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    .floor {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .floor-label {
+      width: 36px;
+      font-size: 20px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      width: 70px;
+      height: 42px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: none;
+      background: #555;
+      color: white;
+      cursor: pointer;
+    }
+
+    .hint {
+      margin-top: 18px;
+      color: #c62828;
+      font-size: 18px;
+      min-height: 24px;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .lobby-title {
+        font-size: 38px;
+      }
+
+      .room-name {
+        font-size: 22px;
+      }
+
+      .room-count {
+        font-size: 18px;
+      }
+
+      .btn {
+        width: 58px;
+        height: 38px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div id="lobbyPage">
+      <div class="lobby-title">凱大王PP</div>
+
+      <div class="create-room-box">
+        <input id="createRoomInput" type="text" placeholder="輸入你的名字" />
+        <button id="createRoomBtn" disabled>新增房間</button>
+      </div>
+
+      <div class="section-title">房間列表</div>
+      <div id="rooms" class="rooms"></div>
+    </div>
+
+    <div id="roomPage" class="room-page" style="display:none;">
+      <div class="room-header">
+        <div id="roomTitle" class="room-name"></div>
+        <div id="roomCount" class="room-count"></div>
+      </div>
+
+      <div style="margin-bottom:16px;font-size:22px;">
+        你的名字：<span id="myName"></span>
+      </div>
+
+      <button id="leaveBtn" class="leave-btn">離開</button>
+
+      <div class="section-title">房內玩家</div>
+      <div id="players" class="players"></div>
+
+      <div class="top-bar">
+        <button id="resetBtn">🧹</button>
+      </div>
+
+      <div class="grid">
+        <div id="floors"></div>
+      </div>
+    </div>
+
+    <div id="hint" class="hint"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
